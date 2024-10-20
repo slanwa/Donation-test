@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Include EmailJS script -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init("VAY6aMp8DS1kQnM7Y");  // Your actual EmailJS public key
+        })();
+    </script>
+
+    <!-- Include PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AZwEbmx81DfaQGxl3bF6lZsLKFNVzmpDiyzMSnZxMrbruEmxYKM9inbYwbrVL1pl9xE9mJMwqoqUGq_t"></script>
+</head>
+<body>
+    <header>
+        <h1>Contact Us</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="contact">
+        <form id="contact-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="subject">Subject:</label>
+            <input type="text" id="subject" name="subject" required>
+            
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+            
+            <button type="submit">Send Message</button>
+        </form>
+
+        <div id="paypal-button-container"></div> <!-- PayPal button container -->
+
+        <script>
+            // PayPal Button setup
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: '10.00' // Replace with the desired amount
+                            }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        alert('Transaction completed by ' + details.payer.name.given_name);
+                        // Optionally redirect to a success page
+                        window.location.href = '/success';
+                    });
+                },
+                onError: function(err) {
+                    console.error(err);
+                    alert('An error occurred during the transaction.');
+                }
+            }).render('#paypal-button-container'); // Render the PayPal button
+        </script>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Your Company. All rights reserved.</p>
+    </footer>
+
+    <!-- Include your custom JS file -->
+    <script src="script.js"></script>
+</body>
+</html>
